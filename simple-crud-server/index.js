@@ -32,13 +32,22 @@ async function run() {
       const users = await cursor.toArray();
       res.send(users);
     });
-    
+
 
     app.post("/addUser", async (req, res) => {
       console.log("data in the server", req.body);
       const result = await usersCollection.insertOne(req.body);
       res.send(result);
     });
+
+    app.delete("/deleteUser/:id", async (req, res) => {
+      const id = req.params.id;
+      console.log("delete user id", id);
+      const query = { _id: new ObjectId(id) };
+      const result = await usersCollection.deleteOne(query);
+      res.send(result);
+    });
+    
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });

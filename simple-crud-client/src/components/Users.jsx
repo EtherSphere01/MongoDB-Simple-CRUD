@@ -1,15 +1,12 @@
-import React, { use } from "react";
+import { useState } from "react";
 
-const Users = ({ usersPromise }) => {
-    const initialUsers = use(usersPromise);
-    
+const Users = ({ initialUsers }) => {
+  const [users, setUsers] = useState(initialUsers);
 
   const handleAddUser = (e) => {
     e.preventDefault();
     const name = e.target.name.value;
     const email = e.target.email.value;
-
-    //   create user in database
 
     fetch("http://localhost:3000/addUser", {
       method: "POST",
@@ -20,26 +17,53 @@ const Users = ({ usersPromise }) => {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
         if (data.acknowledged) {
           alert("User added successfully");
+
+          // Refetch users
+          fetch("http://localhost:3000/users")
+            .then((res) => res.json())
+            .then((data) => setUsers(data));
         }
         e.target.reset();
       });
   };
+
+  const handleDeleteUser = (id) => {
+    fetch(`http://localhost:3000/deleteUser/${id}`, {
+      method: "DELETE",
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.deletedCount > 0) {
+          alert("User deleted successfully");
+          const remainingUsers = users.filter((user) => user._id !== id);
+          setUsers(remainingUsers);
+        }
+      });
+  };
+
   return (
     <div>
+      <form onSubmit={handleAddUser}>
+        <label htmlFor="name">Name: </label>
+        <input type="text" name="name" />
+        <br />
+        <label htmlFor="email">Email: </label>
+        <input type="email" name="email" />
+        <br />
+        <input type="submit" name="submit" />
+        <br />
+      </form>
+
       <div>
-        <form onSubmit={handleAddUser}>
-          <label htmlFor="name">Name: </label>
-          <input type="text" name="name" />
-          <br></br>
-          <label htmlFor="email">Email: </label>
-          <input type="email" name="email" />
-          <br></br>
-          <input type="submit" name="submit" />
-          <br></br>
-        </form>
+        {users.map((user) => (
+          <div key={user._id}>
+            <h3>{user.name}</h3>
+            <p>{user.email}</p>
+            <button onClick={() => handleDeleteUser(user._id)}>Delete</button>
+          </div>
+        ))}
       </div>
     </div>
   );
