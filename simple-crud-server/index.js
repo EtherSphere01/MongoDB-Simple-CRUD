@@ -3,13 +3,14 @@ const { MongoClient, ServerApiVersion } = require("mongodb");
 const app = express();
 const port = process.env.PORT || 3000;
 const cors = require("cors");
+const { ObjectId } = require("mongodb");
 
 // Middleware
 app.use(cors());
 app.use(express.json());
 
 const uri =
-  "mongodb+srv://simpleDBUser:Y9QYPQFigk90imRN@cluster0.8o3ok5y.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+  "mongodb+srv://simpleDBUser:Y9QYPQFigk90imRN@cluster0.2x2eb3h.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const client = new MongoClient(uri, {
@@ -41,6 +42,7 @@ async function run() {
 
     app.delete("/deleteUser/:id", async (req, res) => {
       const id = req.params.id;
+      console.log("delete user id", id);
       console.log("delete user id", id);
       const query = { _id: new ObjectId(id) };
       const result = await usersCollection.deleteOne(query);

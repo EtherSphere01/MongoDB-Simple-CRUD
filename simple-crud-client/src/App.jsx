@@ -1,6 +1,8 @@
-import { useState, useEffect } from "react";
-import "./App.css";
+// App.jsx
+import { useEffect, useState } from "react";
 import Users from "./components/Users";
+import "./App.css";
+import "./index.css";
 
 function App() {
   const [users, setUsers] = useState([]);
@@ -14,7 +16,7 @@ function App() {
   return (
     <>
       <h1>Simple Crud Operation</h1>
-      <Users initialUsers={users} />
+      <Users users={users}></Users>
     </>
   );
 }
