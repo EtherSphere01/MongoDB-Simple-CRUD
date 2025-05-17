@@ -72,6 +72,8 @@ const Users = ({ users }) => {
             <h3>{user.name}</h3>
             <p>{user.email}</p>
             <Link to={`/user/${user._id}`}>Details</Link>
+            <br></br>
+            <Link to={`/update/${user._id}`}>Edit</Link>
             <button onClick={() => handleDeleteUser(user._id)}>Delete</button>
           </div>
         ))
