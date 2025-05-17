@@ -34,6 +34,13 @@ async function run() {
       res.send(users);
     });
 
+    app.get("/user/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await usersCollection.findOne(query);
+      res.send(result);
+    });
+
     app.post("/addUser", async (req, res) => {
       console.log("data in the server", req.body);
       const result = await usersCollection.insertOne(req.body);
